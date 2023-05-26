@@ -1,7 +1,4 @@
-library(roxygen2); # Read in the roxygen2 R package
-roxygenise();      # Builds the help files
-
-# Función para trabajar la ENAHO
+# Función para trabajar la ENAPRES
 consulta_enapres <- function(periodo,
                            codigo_modulo,
                            base,
