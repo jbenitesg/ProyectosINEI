@@ -149,3 +149,5 @@ consulta_enapres <- function(periodo,
     data
   }
 }
+library(roxygen2) # Read in the roxygen2 R package
+roxygenise()      # Builds the help files
