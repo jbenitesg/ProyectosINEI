@@ -104,7 +104,6 @@ consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "
   codigo_encuesta <- versiones[versiones[,1] == periodo,2] ;   # Extrae el código de la encuesta con la matriz versiones
   modulo <- glue("-Modulo{codigo_modulo}.zip") ;
   ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/" ;
-  modulo <- glue::glue("-Modulo{id_modulo +}.zip") ;
   url <- glue::glue("{ruta_base}{codigo_encuesta}{modulo}") ;
 
   utils::download.file(url,temp, timeout=120) ; # Descargamos
