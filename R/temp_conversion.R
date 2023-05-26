@@ -4,12 +4,8 @@
 #' @param consulta_enaho Consulta a ENAHO de cada año en metodología actualizada
 #' @return Base del módulo de interés de la ENAHO
 #' @examples
-#' temp1 <- consulta_enaho(periodo = 2020, codigo_modulo = 1, base = "enaho01-100-2022);
+#' temp1 <- consulta_enaho(periodo = 2020, codigo_modulo = 1, base = "enaho01-100-2022")
 #' @export
-#'
-#'
-#'
-# Función para trabajar la ENAHO
 consulta_enaho <- function(periodo,
                            codigo_modulo,
                            base,
@@ -84,20 +80,11 @@ consulta_enaho <- function(periodo,
 #' @param consulta_enapres Consulta a módulo de interés de la ENAPRES según año
 #' @return Módulo de la ENAPRES consultado
 #' @examples
-#' temp1 <- consulta_enapres(periodo = 2019, codigo_modulo = 1492, base = "CAP_300_URBANO_RURAL_5");
+#' temp1 <- consulta_enapres(periodo = 2019, codigo_modulo = 1492, base = "CAP_300_URBANO_RURAL_5")
 #' @export
-# Función para trabajar la ENAPRES
-consulta_enapres <- function(periodo,
-                             codigo_modulo,
-                             base,
-                             guardar = FALSE,
-                             ruta = "",
-                             codificacion = NULL) {
-  # Generamos dos objetos temporales: un archivo y una carpeta
-  temp <- tempfile() ; tempdir <- tempdir()
-
-  # Genera una matriz con el número identificador de versiones por cada año
-  versiones <- matrix(
+consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "", codificacion = NULL) {
+  temp <- tempfile() ; tempdir <- tempdir();   # Generamos dos objetos temporales: un archivo y una carpeta
+  versiones <- matrix(    # Genera una matriz con el número identificador de versiones por cada año
     c(
       2022, 785,
       2021, 761,
@@ -112,42 +99,27 @@ consulta_enapres <- function(periodo,
       2012, 325,
       2011, 293,
       2010, 266),
-    byrow = T,
-    ncol = 2)
+    byrow = T, ncol = 2);
 
-  # Extrae el código de la encuesta con la matriz versiones
-  codigo_encuesta <- versiones[versiones[,1] == periodo,2]
-  modulo <- glue("-Modulo{codigo_modulo}.zip")
-  ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/" # La ruta de microdatos INEI
-  modulo <- glue::glue("-Modulo{id_modulo +}.zip")
-  url <- glue::glue("{ruta_base}{codigo_encuesta}{modulo}")
-  #https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/785-Modulo1727.zip
+  codigo_encuesta <- versiones[versiones[,1] == periodo,2] ;   # Extrae el código de la encuesta con la matriz versiones
+  modulo <- glue("-Modulo{codigo_modulo}.zip") ;
+  ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/" ;
+  modulo <- glue::glue("-Modulo{id_modulo +}.zip") ;
+  url <- glue::glue("{ruta_base}{codigo_encuesta}{modulo}") ;
 
-  # Descargamos el archivo
-  utils::download.file(url,temp, timeout=120)
+  utils::download.file(url,temp, timeout=120) ; # Descargamos
 
-  # Listamos los archivos descargados y seleccionamos la base elegida
-  archivos <- utils::unzip(temp,list = T)
-  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base,"\\.")) == TRUE,]
+  archivos <- utils::unzip(temp,list = T) ; # Listamos los archivos
+  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base,"\\.")) == TRUE,] ; # Seleccionamos la base
 
-  # Elegimos entre guardar los archivos o pasarlos directamente a un objeto
   if(guardar == TRUE) {
-    utils::unzip(temp, files = archivos$Name, exdir = paste(getwd(), "/", ruta, sep = ""))
-    print(paste("Archivos descargados en: ", getwd(), "/", ruta, sep = ""))
+    utils::unzip(temp, files = archivos$Name, exdir = paste(getwd(), "/", ruta, sep = "")) ;
+    print(paste("Archivos descargados en: ", getwd(), "/", ruta, sep = "")) ;
   }
   else {
-    data <- haven::read_sav(
-      utils::unzip(
-        temp,
-        files = archivos$Name[grepl(".sav|.SAV",archivos$Name)],
-        exdir = tempdir
-      ),
-      encoding = codificacion
-    )
-    nombres <- toupper(colnames(data))
-    colnames(data) <- nombres
-    data
-  }
+    data <- haven::read_sav( utils::unzip(temp, files = archivos$Name[grepl(".sav|.SAV",archivos$Name)], exdir = tempdir), encoding = codificacion) ;
+    nombres <- toupper(colnames(data)) ;
+    colnames(data) <- nombres ;
+    return(data) ;
+  };
 }
-library(roxygen2) # Read in the roxygen2 R package
-roxygenise()      # Builds the help files
