@@ -68,7 +68,7 @@ consulta_enaho <- function(periodo,
       ),
       encoding = codificacion
     )
-    nombres <- toupper(colnames(data))
+    nombres <- tolower(colnames(data))
     colnames(data) <- nombres
     data
   }
@@ -117,7 +117,7 @@ consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "
   }
   else {
     data <- haven::read_sav( utils::unzip(temp, files = archivos$Name[grepl(".sav|.SAV",archivos$Name)], exdir = tempdir), encoding = codificacion) ;
-    nombres <- toupper(colnames(data)) ;
+    nombres <- tolower(colnames(data)) ;
     colnames(data) <- nombres ;
     return(data) ;
   };
