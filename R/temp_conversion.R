@@ -44,7 +44,7 @@ consulta_enaho <- function(periodo,
 
   # Extrae el código de la encuesta con la matriz versiones
   codigo_encuesta <- versiones[versiones[,1] == periodo,2]
-  ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/" # La ruta de microdatos INEI
+  ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/STATA/" # La ruta de microdatos INEI
   modulo <- glue("-Modulo{codigo_modulo}.zip")
   url <- glue("{ruta_base}{codigo_encuesta}{modulo}")
   #https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/548-Modulo64.zip
@@ -62,10 +62,10 @@ consulta_enaho <- function(periodo,
     print(paste("Archivos descargados en: ", getwd(), "/", ruta, sep = ""))
   }
   else {
-    data <- haven::read_sav(
+    data <- haven::read_dta(
       utils::unzip(
         temp,
-        files = archivos$Name[grepl(".sav|.SAV",archivos$Name)],
+        files = archivos$Name[grepl(".dta|.DTA",archivos$Name)],
         exdir = tempdir
       ),
       encoding = codificacion
