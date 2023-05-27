@@ -1,7 +1,9 @@
 #' Encuesta Nacional de Hogares versión anual - Metodología ACTUALIZADA
 #'
 #' Consulta las bases de datos de la ENAHO de forma directa
-#' @param consulta_enaho Consulta a ENAHO de cada año en metodología actualizada
+#' @param periodo Año de consulta
+#' @param codigo_modulo ID del módulo (Dos dígitos para la ENAHO)
+#' @param base Nombre de la base a consultar
 #' @return Base del módulo de interés de la ENAHO
 #' @examples
 #' temp1 <- consulta_enaho(periodo = 2020, codigo_modulo = 1, base = "enaho01-100-2022")
@@ -20,23 +22,23 @@ consulta_enaho <- function(periodo,
     c(
       2022, 784,
       2021, 759,
-      2020, 739,
-      2019, 691,
-      2018, 638,
-      2017, 605,
-      2016, 548,
+      2020, 737,
+      2019, 687,
+      2018, 634,
+      2017, 603,
+      2016, 546,
       2015, 504,
-      2014, 441,
-      2013, 407,
-      2012, 323,
-      2011, 290,
-      2010, 260,
-      2009, 238,
-      2008, 209,
-      2007, 194,
-      2006, 183,
-      2005, 150,
-      2004, 120),
+      2014, 440,
+      2013, 404,
+      2012, 324,
+      2011, 291,
+      2010, 279,
+      2009, 285,
+      2008, 284,
+      2007, 283,
+      2006, 282,
+      2005, 281,
+      2004, 280),
     byrow = T,
     ncol = 2)
 

@@ -14,7 +14,11 @@ consulta_enaho(
 )
 }
 \arguments{
-\item{consulta_enaho}{Consulta a ENAHO de cada año en metodología actualizada}
+\item{periodo}{Año de consulta}
+
+\item{codigo_modulo}{ID del módulo (Dos dígitos para la ENAHO)}
+
+\item{base}{Nombre de la base a consultar}
 }
 \value{
 Base del módulo de interés de la ENAHO
