@@ -27,5 +27,5 @@ Base del módulo de interés de la ENAHO
 Consulta las bases de datos de la ENAHO de forma directa
 }
 \examples{
-temp1 <- consulta_enaho(periodo = 2020, codigo_modulo = 1, base = "enaho01-100-2022")
+temp1 <- consulta_enaho(periodo = 2020, codigo_modulo = 01, base = "enaho01-100-2022")
 }

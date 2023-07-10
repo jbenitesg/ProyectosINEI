@@ -2,3 +2,4 @@
 
 export(consulta_enaho)
 export(consulta_enapres)
+export(consulta_endes)
