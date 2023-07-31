@@ -12,7 +12,8 @@ inei_tabla(
   titulo,
   subtitulo,
   fuente = NULL,
-  nota = NULL
+  nota = NULL,
+  formato = "0\%"
 )
 }
 \description{

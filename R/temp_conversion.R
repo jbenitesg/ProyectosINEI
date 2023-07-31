@@ -327,7 +327,7 @@ suma_ponderada <- function(data, variable, groups, peso, total = T) {
 #' Tablas en formato INEI
 #'
 #' @export
-inei_tabla <- function(wb, sheet, data, cuadro, titulo, subtitulo, fuente = NULL, nota = NULL) {
+inei_tabla <- function(wb, sheet, data, cuadro, titulo, subtitulo, fuente = NULL, nota = NULL, formato = "0%") {
   # Creamos la hoja
   openxlsx::addWorksheet(wb, sheetName = sheet)
   # Seteo inicial
@@ -403,7 +403,7 @@ inei_tabla <- function(wb, sheet, data, cuadro, titulo, subtitulo, fuente = NULL
   for (i in c(frow_l:frow_u)) {
     openxlsx::addStyle(wb, sheet,
       style = createStyle(
-        numFmt = "0%",
+        numFmt = formato,
         halign = "center"
       ),
       cols = (fcol_l:fcol_u),
