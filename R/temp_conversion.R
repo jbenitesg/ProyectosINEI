@@ -205,3 +205,123 @@ consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "
     return(data) ;
   };
 }
+
+#' Media ponederada
+#'
+#' @export
+media_ponderada <- function(data, variable, groups, peso, total = T) {
+  # data: El dataframe que contiene los datos
+  # variable: El nombre de la variable a estimar (puede ser un vector de nombres para varias variables)
+  # groups: El nombre de las variables de agrupación (puede ser un vector de nombres para varios grupos)
+  # peso: El nombre de la variable de peso a utilizar en la media ponderada
+
+  # Convertir las variables de agrupación y estimación a símbolos para usar en dplyr
+  group_cols <- rlang::syms(groups)
+  var_cols <- rlang::syms(variable)
+  peso_col <- rlang::sym(peso)
+
+  if (total == T) {
+    # Crear una lista para almacenar los resultados de cada nivel de agrupación
+    resultados <- list()
+
+    # Calcular la media ponderada para cada nivel de agrupación
+    for (i in seq_along(group_cols)) {
+      current_group <- group_cols[1:i]
+      media_ponderada <- data %>%
+        dplyr::group_by(!!!current_group) %>%
+        dplyr::summarise_at(vars(!!!var_cols), ~ collapse::fmean(.x, w = eval(peso_col)))
+
+      # Agregar el nivel de agrupación como una columna nueva con etiquetas
+      # Solo para el primer nivel de agrupación, los demás ya están incluidos en el data frame
+      if (i < length(group_cols)) {
+        if (i == 1) {
+          j <- 2
+          while (j <= length(group_cols)) {
+            col_name <- paste(rlang::get_expr(group_cols[j]))
+            media_ponderada[[col_name]] <- haven::labelled(x = 0, labels = c("Total" = 0))
+            j <- j + 1
+          }
+        }
+        lead <- i + 1
+        lead_group <- group_cols[lead]
+        col_name <- paste(rlang::get_expr(lead_group), collapse = "")
+        media_ponderada[[col_name]] <- haven::labelled(x = 0, labels = c("Total" = 0))
+      }
+
+      resultados[[paste(rlang::get_expr(current_group), collapse = "_")]] <- media_ponderada
+    }
+
+    # Combinar los resultados en un único dataframe
+    consolidado <- do.call(dplyr::bind_rows, resultados) %>%
+      dplyr::arrange(!!!group_cols)
+
+
+  }
+  else {
+    consolidado <- data %>%
+      plyr::group_by(!!!group_cols) %>%
+      plyr::summarise_at(vars(!!!var_cols), ~ collapse::fmean(.x, w = eval(peso_col)))
+  }
+
+  return(consolidado)
+}
+#' Suma ponderada
+#'
+#' @export
+suma_ponderada <- function(data, variable, groups, peso, total = T) {
+  # data: El dataframe que contiene los datos
+  # variable: El nombre de la variable a estimar (puede ser un vector de nombres para varias variables)
+  # groups: El nombre de las variables de agrupación (puede ser un vector de nombres para varios grupos)
+  # peso: El nombre de la variable de peso a utilizar en la media ponderada
+
+  # Convertir las variables de agrupación y estimación a símbolos para usar en dplyr
+  group_cols <- rlang::syms(groups)
+  var_cols <- rlang::syms(variable)
+  peso_col <- rlang::sym(peso)
+
+  if (total == T) {
+    # Crear una lista para almacenar los resultados de cada nivel de agrupación
+    resultados <- list()
+
+    # Calcular la media ponderada para cada nivel de agrupación
+    for (i in seq_along(group_cols)) {
+      current_group <- group_cols[1:i]
+      suma_ponderada <- data %>%
+        dplyr::group_by(!!!current_group) %>%
+        dplyr::summarise_at(vars(!!!var_cols), ~ collapse::fsum(.x, w = eval(peso_col)))
+
+      # Agregar el nivel de agrupación como una columna nueva con etiquetas
+      # Solo para el primer nivel de agrupación, los demás ya están incluidos en el data frame
+      if (i < length(group_cols)) {
+        if (i == 1) {
+          j <- 2
+          while (j <= length(group_cols)) {
+            col_name <- paste(rlang::get_expr(group_cols[j]))
+            suma_ponderada[[col_name]] <- haven::labelled(x = 0, labels = c("Total" = 0))
+            j <- j + 1
+          }
+        }
+        lead <- i + 1
+        lead_group <- group_cols[lead]
+        col_name <- paste(rlang::get_expr(lead_group), collapse = "")
+        suma_ponderada[[col_name]] <- haven::labelled(x = 0, labels = c("Total" = 0))
+      }
+
+      resultados[[paste(rlang::get_expr(current_group), collapse = "_")]] <- suma_ponderada
+    }
+
+    # Combinar los resultados en un único dataframe
+    consolidado <- do.call(dplyr::bind_rows, resultados) %>%
+      dplyr::arrange(!!!group_cols)
+
+
+  }
+  else {
+    consolidado <- data %>%
+      plyr::group_by(!!!group_cols) %>%
+      dplyr::summarise_at(vars(!!!var_cols), ~ collapse::fsum(.x, w = eval(peso_col)))
+  }
+
+  return(consolidado)
+}
+
