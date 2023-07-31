@@ -15,7 +15,8 @@ consulta_enaho <- function(periodo,
                            ruta = "",
                            codificacion = NULL) {
   # Generamos dos objetos temporales: un archivo y una carpeta
-  temp <- tempfile() ; tempdir <- tempdir()
+  temp <- tempfile()
+  tempdir <- tempdir()
 
   # Genera una matriz con el número identificador de versiones por cada año
   versiones <- matrix(
@@ -38,34 +39,35 @@ consulta_enaho <- function(periodo,
       2007, 283,
       2006, 282,
       2005, 281,
-      2004, 280),
+      2004, 280
+    ),
     byrow = T,
-    ncol = 2)
+    ncol = 2
+  )
 
   # Extrae el código de la encuesta con la matriz versiones
-  codigo_encuesta <- versiones[versiones[,1] == periodo,2]
+  codigo_encuesta <- versiones[versiones[, 1] == periodo, 2]
   ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/STATA/" # La ruta de microdatos INEI
   modulo <- glue("-Modulo{codigo_modulo}.zip")
   url <- glue("{ruta_base}{codigo_encuesta}{modulo}")
-  #https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/548-Modulo64.zip
+  # https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/548-Modulo64.zip
 
   # Descargamos el archivo
-  utils::download.file(url,temp, timeout=120)
+  utils::download.file(url, temp, timeout = 120)
 
   # Listamos los archivos descargados y seleccionamos la base elegida
-  archivos <- utils::unzip(temp,list = T)
-  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base,"\\.")) == TRUE,]
+  archivos <- utils::unzip(temp, list = T)
+  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base, "\\.")) == TRUE, ]
 
   # Elegimos entre guardar los archivos o pasarlos directamente a un objeto
-  if(guardar == TRUE) {
+  if (guardar == TRUE) {
     utils::unzip(temp, files = archivos$Name, exdir = paste(getwd(), "/", ruta, sep = ""))
     print(paste("Archivos descargados en: ", getwd(), "/", ruta, sep = ""))
-  }
-  else {
+  } else {
     data <- haven::read_dta(
       utils::unzip(
         temp,
-        files = archivos$Name[grepl(".dta|.DTA",archivos$Name)],
+        files = archivos$Name[grepl(".dta|.DTA", archivos$Name)],
         exdir = tempdir
       ),
       encoding = codificacion
@@ -95,7 +97,8 @@ consulta_endes <- function(periodo,
                            ruta = "",
                            codificacion = NULL) {
   # Generamos dos objetos temporales: un archivo y una carpeta
-  temp <- tempfile() ; tempdir <- tempdir()
+  temp <- tempfile()
+  tempdir <- tempdir()
 
   # Genera una matriz con el número identificador de versiones por cada año
   versiones <- matrix(
@@ -118,34 +121,35 @@ consulta_endes <- function(periodo,
       2007, 194,
       2006, 183,
       2005, 150,
-      2004, 120),
+      2004, 120
+    ),
     byrow = T,
-    ncol = 2)
+    ncol = 2
+  )
 
   # Extrae el código de la encuesta con la matriz versiones
-  codigo_encuesta <- versiones[versiones[,1] == periodo,2]
+  codigo_encuesta <- versiones[versiones[, 1] == periodo, 2]
   ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/" # La ruta de microdatos INEI
   modulo <- glue("-Modulo{codigo_modulo}.zip")
   url <- glue("{ruta_base}{codigo_encuesta}{modulo}")
-  #https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/548-Modulo64.zip
+  # https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/548-Modulo64.zip
 
   # Descargamos el archivo
-  utils::download.file(url,temp, timeout=120)
+  utils::download.file(url, temp, timeout = 120)
 
   # Listamos los archivos descargados y seleccionamos la base elegida
-  archivos <- utils::unzip(temp,list = T)
-  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base,"\\.")) == TRUE,]
+  archivos <- utils::unzip(temp, list = T)
+  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base, "\\.")) == TRUE, ]
 
   # Elegimos entre guardar los archivos o pasarlos directamente a un objeto
-  if(guardar == TRUE) {
+  if (guardar == TRUE) {
     utils::unzip(temp, files = archivos$Name, exdir = paste(getwd(), "/", ruta, sep = ""))
     print(paste("Archivos descargados en: ", getwd(), "/", ruta, sep = ""))
-  }
-  else {
+  } else {
     data <- haven::read_sav(
       utils::unzip(
         temp,
-        files = archivos$Name[grepl(".sav|.SAV",archivos$Name)],
+        files = archivos$Name[grepl(".sav|.SAV", archivos$Name)],
         exdir = tempdir
       ),
       encoding = codificacion
@@ -166,8 +170,9 @@ consulta_endes <- function(periodo,
 #' temp1 <- consulta_enapres(periodo = 2019, codigo_modulo = 1492, base = "CAP_300_URBANO_RURAL_5")
 #' @export
 consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "", codificacion = NULL) {
-  temp <- tempfile() ; tempdir <- tempdir();   # Generamos dos objetos temporales: un archivo y una carpeta
-  versiones <- matrix(    # Genera una matriz con el número identificador de versiones por cada año
+  temp <- tempfile()
+  tempdir <- tempdir() # Generamos dos objetos temporales: un archivo y una carpeta
+  versiones <- matrix( # Genera una matriz con el número identificador de versiones por cada año
     c(
       2022, 785,
       2021, 761,
@@ -181,29 +186,30 @@ consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "
       2013, 406,
       2012, 325,
       2011, 293,
-      2010, 266),
-    byrow = T, ncol = 2);
+      2010, 266
+    ),
+    byrow = T, ncol = 2
+  )
 
-  codigo_encuesta <- versiones[versiones[,1] == periodo,2] ;   # Extrae el código de la encuesta con la matriz versiones
-  modulo <- glue("-Modulo{codigo_modulo}.zip") ;
-  ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/" ;
-  url <- glue::glue("{ruta_base}{codigo_encuesta}{modulo}") ;
+  codigo_encuesta <- versiones[versiones[, 1] == periodo, 2]  # Extrae el código de la encuesta con la matriz versiones
+  modulo <- glue("-Modulo{codigo_modulo}.zip")
+  ruta_base <- "https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/"
+  url <- glue::glue("{ruta_base}{codigo_encuesta}{modulo}")
 
-  utils::download.file(url,temp, timeout=120) ; # Descargamos
+  utils::download.file(url, temp, timeout = 120)  # Descargamos
 
-  archivos <- utils::unzip(temp,list = T) ; # Listamos los archivos
-  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base,"\\.")) == TRUE,] ; # Seleccionamos la base
+  archivos <- utils::unzip(temp, list = T)  # Listamos los archivos
+  archivos <- archivos[stringr::str_detect(archivos$Name, paste0(base, "\\.")) == TRUE, ]  # Seleccionamos la base
 
-  if(guardar == TRUE) {
-    utils::unzip(temp, files = archivos$Name, exdir = paste(getwd(), "/", ruta, sep = "")) ;
-    print(paste("Archivos descargados en: ", getwd(), "/", ruta, sep = "")) ;
+  if (guardar == TRUE) {
+    utils::unzip(temp, files = archivos$Name, exdir = paste(getwd(), "/", ruta, sep = ""))
+    print(paste("Archivos descargados en: ", getwd(), "/", ruta, sep = ""))
+  } else {
+    data <- haven::read_sav(utils::unzip(temp, files = archivos$Name[grepl(".sav|.SAV", archivos$Name)], exdir = tempdir), encoding = codificacion)
+    nombres <- tolower(colnames(data))
+    colnames(data) <- nombres
+    return(data)
   }
-  else {
-    data <- haven::read_sav( utils::unzip(temp, files = archivos$Name[grepl(".sav|.SAV",archivos$Name)], exdir = tempdir), encoding = codificacion) ;
-    nombres <- tolower(colnames(data)) ;
-    colnames(data) <- nombres ;
-    return(data) ;
-  };
 }
 
 #' Media ponederada
@@ -254,10 +260,7 @@ media_ponderada <- function(data, variable, groups, peso, total = T) {
     # Combinar los resultados en un único dataframe
     consolidado <- do.call(dplyr::bind_rows, resultados) %>%
       dplyr::arrange(!!!group_cols)
-
-
-  }
-  else {
+  } else {
     consolidado <- data %>%
       plyr::group_by(!!!group_cols) %>%
       plyr::summarise_at(vars(!!!var_cols), ~ collapse::fmean(.x, w = eval(peso_col)))
@@ -313,10 +316,7 @@ suma_ponderada <- function(data, variable, groups, peso, total = T) {
     # Combinar los resultados en un único dataframe
     consolidado <- do.call(dplyr::bind_rows, resultados) %>%
       dplyr::arrange(!!!group_cols)
-
-
-  }
-  else {
+  } else {
     consolidado <- data %>%
       plyr::group_by(!!!group_cols) %>%
       dplyr::summarise_at(vars(!!!var_cols), ~ collapse::fsum(.x, w = eval(peso_col)))
@@ -324,4 +324,199 @@ suma_ponderada <- function(data, variable, groups, peso, total = T) {
 
   return(consolidado)
 }
+#' Tablas en formato INEI
+#'
+#' @export
+inei_tabla <- function(wb, sheet, data, cuadro, titulo, subtitulo, fuente = NULL, nota = NULL) {
+  # Creamos la hoja
+  openxlsx::addWorksheet(wb, sheetName = sheet)
+  # Seteo inicial
+  frow <- 4
+  fcol <- 2
 
+  # Número de cuadro
+  openxlsx::writeData(wb, sheet,
+    x = cuadro,
+    startCol = fcol, startRow = frow
+  )
+  openxlsx::mergeCells(wb, sheet,
+    cols = c(fcol:(ncol(data) + 1)),
+    rows = (frow)
+  )
+  openxlsx::addStyle(wb, sheet,
+    style = createStyle(
+      halign = "center",
+      textDecoration = "bold"
+    ),
+    cols = (fcol:(ncol(data) + 1)),
+    rows = (frow)
+  )
+  # Título
+  openxlsx::writeData(wb, sheet,
+    x = toupper(titulo),
+    startCol = 2,
+    startRow = (frow + 1)
+  )
+  openxlsx::mergeCells(wb, sheet,
+    cols = c(fcol:(ncol(data) + 1)),
+    rows = (frow + 1)
+  )
+  openxlsx::addStyle(wb, sheet,
+    style = createStyle(
+      halign = "center",
+      wrapText = T
+    ),
+    cols = (fcol:(ncol(data) + 1)),
+    rows = (frow + 1)
+  )
+  # Subtítulo
+  openxlsx::writeData(wb, sheet,
+    x = str_to_sentence(subtitulo),
+    startCol = 2,
+    startRow = (frow + 2)
+  )
+  openxlsx::mergeCells(wb, sheet,
+    cols = c(fcol:(ncol(data) + 1)),
+    rows = (frow + 2)
+  )
+
+  openxlsx::addStyle(wb, sheet,
+    style = createStyle(
+      halign = "center"
+    ),
+    cols = (fcol:(ncol(data) + 1)),
+    rows = (frow + 2)
+  )
+  # Data
+  fcol_l <- fcol + 1
+  fcol_u <- ncol(data) + 1
+  frow_l <- frow + 4
+  frow_u <- nrow(data) + frow_l
+
+  openxlsx::writeData(
+    wb, sheet,
+    data,
+    startCol = fcol,
+    startRow = frow_l
+  )
+
+  for (i in c(frow_l:frow_u)) {
+    openxlsx::addStyle(wb, sheet,
+      style = createStyle(
+        numFmt = "0%",
+        halign = "center"
+      ),
+      cols = (fcol_l:fcol_u),
+      rows = (i)
+    )
+  }
+
+  # Formato a encabezados
+  openxlsx::addStyle(wb, sheet,
+    style = createStyle(
+      borderStyle = "medium",
+      border = "TopBottom",
+      halign = "center"
+    ),
+    cols = fcol:(ncol(data) + 1),
+    rows = (frow + 4)
+  )
+  # Añadimos notas y fuente
+  if (is.null(fuente) == F) {
+    if (is.null(nota) == T) {
+      openxlsx::writeData(wb, sheet,
+        x = fuente,
+        startCol = fcol,
+        startRow = frow_u + 2
+      )
+
+      openxlsx::mergeCells(wb, sheet,
+        cols = c(fcol:(ncol(data) + 1)),
+        rows = (frow_u + 2)
+      )
+      openxlsx::addStyle(wb, sheet,
+        style = createStyle(
+          textDecoration = "bold",
+          wrapText = T
+        ),
+        cols = c(fcol:(ncol(data) + 1)),
+        rows = (frow_u + 2)
+      )
+    } else {
+      lnota <- length(nota)
+      # Nota
+      openxlsx::writeData(wb, sheet,
+        x = "Nota:",
+        startCol = fcol,
+        startRow = frow_u + 2
+      )
+
+      openxlsx::mergeCells(wb, sheet,
+        cols = c(fcol:(ncol(data) + 1)),
+        rows = (frow_u + 2)
+      )
+      openxlsx::addStyle(wb, sheet,
+        style = createStyle(wrapText = T),
+        cols = c(fcol:(ncol(data) + 1)),
+        rows = (frow_u + 2)
+      )
+      for (cap in 1:lnota) {
+        # Nota
+        openxlsx::writeData(wb, sheet,
+          x = nota[cap],
+          startCol = fcol,
+          startRow = frow_u + 2 + cap
+        )
+
+        openxlsx::mergeCells(wb, sheet,
+          cols = c(fcol:(ncol(data) + 1)),
+          rows = (frow_u + 2 + cap)
+        )
+        openxlsx::addStyle(wb, sheet,
+          style = createStyle(wrapText = T),
+          cols = c(fcol:(ncol(data) + 1)),
+          rows = (frow_u + 2 + cap)
+        )
+      }
+
+      # Fuente
+      openxlsx::writeData(wb, sheet,
+        x = fuente,
+        startCol = fcol,
+        startRow = frow_u + 3 + lnota
+      )
+
+      openxlsx::mergeCells(wb, sheet,
+        cols = c(fcol:(ncol(data) + 1)),
+        rows = (frow_u + 3 + lnota)
+      )
+      openxlsx::addStyle(wb, sheet,
+        style = createStyle(
+          textDecoration = "bold",
+          wrapText = T
+        ),
+        cols = c(fcol:(ncol(data) + 1)),
+        rows = (frow_u + 3 + lnota)
+      )
+    }
+  }
+
+  openxlsx::addStyle(wb, sheet,
+    style = createStyle(
+      borderStyle = "medium",
+      border = "top"
+    ),
+    cols = fcol:(ncol(data) + 1),
+    rows = (frow_u + 1)
+  )
+
+  openxlsx::setColWidths(wb, sheet,
+    widths = "auto",
+    cols = c((fcol + 1):(ncol(data) + 1))
+  )
+
+  openxlsx::setRowHeights(wb, sheet,
+    heights = 25,
+    rows = frow + 1
+  )
+}

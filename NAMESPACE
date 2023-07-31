@@ -3,5 +3,6 @@
 export(consulta_enaho)
 export(consulta_enapres)
 export(consulta_endes)
+export(inei_tabla)
 export(media_ponderada)
 export(suma_ponderada)
