@@ -7,6 +7,11 @@
 #' @return Base del módulo de interés de la ENAHO
 #' @examples
 #' temp1 <- consulta_enaho(periodo = 2020, codigo_modulo = 01, base = "enaho01-100-2022")
+#' @import glue
+#' @import tidyverse
+#' @import haven
+#' @import stringr
+#' @import utils
 #' @export
 consulta_enaho <- function(periodo,
                            codigo_modulo,
@@ -89,6 +94,11 @@ consulta_enaho <- function(periodo,
 #' @return Base del módulo de interés de la ENDES
 #' @examples
 #' temp1 <- consulta_endes(periodo = 2004, codigo_modulo = 64, base = "RECH0")
+#' @import glue
+#' @import tidyverse
+#' @import haven
+#' @import stringr
+#' @import utils
 #' @export
 consulta_endes <- function(periodo,
                            codigo_modulo,
@@ -166,6 +176,11 @@ consulta_endes <- function(periodo,
 #' Consulta directa a la ENAPRES del INEI
 #' @param consulta_enapres Consulta a módulo de interés de la ENAPRES según año
 #' @return Módulo de la ENAPRES consultado
+#' @import glue
+#' @import tidyverse
+#' @import haven
+#' @import stringr
+#' @import utils
 #' @examples
 #' temp1 <- consulta_enapres(periodo = 2019, codigo_modulo = 1492, base = "CAP_300_URBANO_RURAL_5")
 #' @export
@@ -214,6 +229,10 @@ consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "
 
 #' Media ponederada
 #'
+#' @import dplyr
+#' @import rlang
+#' @import collapse
+#' @import haven
 #' @export
 media_ponderada <- function(data, variable, groups, peso, total = T) {
   # data: El dataframe que contiene los datos
@@ -262,14 +281,19 @@ media_ponderada <- function(data, variable, groups, peso, total = T) {
       dplyr::arrange(!!!group_cols)
   } else {
     consolidado <- data %>%
-      plyr::group_by(!!!group_cols) %>%
-      plyr::summarise_at(vars(!!!var_cols), ~ collapse::fmean(.x, w = eval(peso_col)))
+      dplyr::group_by(!!!group_cols) %>%
+      dplyr::summarise_at(vars(!!!var_cols), ~ collapse::fmean(.x, w = eval(peso_col)))
   }
 
   return(consolidado)
 }
 #' Suma ponderada
 #'
+#' @import dplyr
+#' @import rlang
+#' @import collapse
+#' @import haven
+
 #' @export
 suma_ponderada <- function(data, variable, groups, peso, total = T) {
   # data: El dataframe que contiene los datos
@@ -318,14 +342,14 @@ suma_ponderada <- function(data, variable, groups, peso, total = T) {
       dplyr::arrange(!!!group_cols)
   } else {
     consolidado <- data %>%
-      plyr::group_by(!!!group_cols) %>%
+      dplyr::group_by(!!!group_cols) %>%
       dplyr::summarise_at(vars(!!!var_cols), ~ collapse::fsum(.x, w = eval(peso_col)))
   }
 
   return(consolidado)
 }
 #' Tablas en formato INEI
-#'
+#' @import openxlsx
 #' @export
 inei_tabla <- function(wb, sheet, data, cuadro, titulo, subtitulo, fuente = NULL, nota = NULL, formato = "0%") {
   # Creamos la hoja
