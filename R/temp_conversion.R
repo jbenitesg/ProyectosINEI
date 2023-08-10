@@ -352,8 +352,12 @@ suma_ponderada <- function(data, variable, groups, peso, total = T) {
 #' @import openxlsx
 #' @export
 inei_tabla <- function(wb, sheet, data, cuadro, titulo, subtitulo, fuente = NULL, nota = NULL, formato = "0%") {
-  # Creamos la hoja
-  openxlsx::addWorksheet(wb, sheetName = sheet)
+  if (sheet %in% openxlsx::sheets(wb)) {
+    print("Existe esta hoja")
+  } else{
+    # Creamos la hoja
+    openxlsx::addWorksheet(wb, sheetName = sheet)
+  }
   # Seteo inicial
   frow <- 4
   fcol <- 2
