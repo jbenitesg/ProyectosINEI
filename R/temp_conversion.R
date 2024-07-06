@@ -57,9 +57,9 @@ consulta_enaho <- function(periodo,
   modulo <- glue("-Modulo{codigo_modulo}.zip")
   url <- glue("{ruta_base}{codigo_encuesta}{modulo}")
   # https://proyectos.inei.gob.pe/iinei/srienaho/descarga/SPSS/548-Modulo64.zip
-
+  
   # Descargamos el archivo
-  utils::download.file(url, temp, timeout = 120)
+  utils::download.file(url, temp, timeout = 240)
 
   # Listamos los archivos descargados y seleccionamos la base elegida
   archivos <- utils::unzip(temp, list = T)
