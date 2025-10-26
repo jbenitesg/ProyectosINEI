@@ -115,6 +115,8 @@ consulta_endes <- function(periodo,
   # Genera una matriz con el número identificador de versiones por cada año
   versiones <- matrix(
     c(
+      2024, 968,
+      2023, 910,
       2022, 786,
       2021, 760,
       2020, 739,
@@ -191,6 +193,7 @@ consulta_enapres <- function(periodo, codigo_modulo, base, guardar = F, ruta = "
   tempdir <- tempdir() # Generamos dos objetos temporales: un archivo y una carpeta
   versiones <- matrix( # Genera una matriz con el número identificador de versiones por cada año
     c(
+      2024, 965,
       2023, 903,
       2022, 785,
       2021, 761,
