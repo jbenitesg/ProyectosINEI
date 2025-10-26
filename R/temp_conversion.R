@@ -26,6 +26,7 @@ consulta_enaho <- function(periodo,
   # Genera una matriz con el número identificador de versiones por cada año
   versiones <- matrix(
     c(
+      2024, 966,
       2023, 906,
       2022, 784,
       2021, 759,
